@@ -23,13 +23,8 @@ return {
                 'cssls',
                 'html',
                 'lua_ls',
-                'rust_analyzer',
                 'gopls',
-                'zk',
-                'ocamllsp',
-                'pylyzer',
-                'svelte',
-                'taplo',
+                'hls'
             },
             handlers = {
                 function (server_name)
