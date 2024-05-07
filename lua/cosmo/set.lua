@@ -1,4 +1,5 @@
 vim.opt.guicursor = ""
+vim.g.zig_fmt_autosave = 0
 
 vim.opt.nu = true
 vim.opt.relativenumber = true
@@ -28,6 +29,6 @@ vim.opt.isfname:append("@-@")
 
 vim.opt.updatetime = 50
 
-vim.opt.colorcolumn = "80"
+vim.opt.colorcolumn = "800"
 
 vim.g.mapleader = " "
