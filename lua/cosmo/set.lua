@@ -1,5 +1,6 @@
 vim.opt.guicursor = ""
 vim.g.zig_fmt_autosave = 0
+vim.opt.cmdheight=0
 
 vim.opt.nu = true
 vim.opt.relativenumber = true

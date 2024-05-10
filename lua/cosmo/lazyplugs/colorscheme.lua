@@ -8,6 +8,7 @@ return {
             background = { -- :h background
             light = "latte",
             dark = "mocha",
+            default_integrations = true,
         },
         transparent_background = true, -- disables setting the background color.
         show_end_of_buffer = false, -- shows the '~' characters after the end of buffers
