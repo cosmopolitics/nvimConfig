@@ -33,3 +33,5 @@ vim.opt.updatetime = 50
 vim.opt.colorcolumn = "800"
 
 vim.g.mapleader = " "
+
+vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")
