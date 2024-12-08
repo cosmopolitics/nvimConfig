@@ -29,7 +29,7 @@ require("lazy").setup({
 --require it from runtime
   spec = {
     -- import your plugins
-    { import = "plugins" },
+    { import = "config.plugins" },
   },
   -- automatically check for plugin updates
   checker = { enabled = true },

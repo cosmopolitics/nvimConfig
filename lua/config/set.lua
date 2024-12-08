@@ -1,35 +1,39 @@
-vim.opt.guicursor = ""
-vim.opt.cmdheight=0
+local set = vim.opt
 
-vim.opt.nu = true
-vim.opt.relativenumber = true
+set.clipboard = "unnamedplus"
 
-vim.opt.tabstop = 2
-vim.opt.softtabstop = 2
-vim.opt.shiftwidth = 2
-vim.opt.expandtab = true
+set.guicursor = ""
+set.cmdheight=0
 
-vim.opt.smartindent = true
+set.nu = true
+set.relativenumber = true
 
-vim.opt.wrap = false
+set.tabstop = 2
+set.softtabstop = 2
+set.shiftwidth = 2
+set.expandtab = true
 
-vim.opt.swapfile = false
-vim.opt.backup = false
-vim.opt.undodir = os.getenv("HOME") .. "/.vim/undodir"
-vim.opt.undofile = true
+set.smartindent = true
 
-vim.opt.hlsearch = false
-vim.opt.incsearch = true
+set.wrap = false
 
-vim.opt.termguicolors = true
+set.swapfile = false
+set.backup = false
+set.undodir = os.getenv("HOME") .. "/.vim/undodir"
+set.undofile = true
 
-vim.opt.scrolloff = 8
-vim.opt.signcolumn = "yes"
-vim.opt.isfname:append("@-@")
+set.hlsearch = false
+set.incsearch = true
 
-vim.opt.updatetime = 50
+set.termguicolors = true
 
-vim.opt.colorcolumn = "800"
+set.scrolloff = 8
+set.signcolumn = "yes"
+set.isfname:append("@-@")
+
+set.updatetime = 50
+
+set.colorcolumn = "800"
 
 vim.g.mapleader = " "
 

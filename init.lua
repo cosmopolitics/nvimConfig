@@ -1,1 +1,1 @@
-require "cosmo"
+require "init"
