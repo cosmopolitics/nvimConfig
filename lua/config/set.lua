@@ -3,7 +3,7 @@ local set = vim.opt
 set.clipboard = "unnamedplus"
 
 set.guicursor = ""
-set.cmdheight=0
+set.cmdheight = 0
 
 set.nu = true
 set.relativenumber = true
