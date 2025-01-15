@@ -3,29 +3,10 @@ local M = {}
 M.setup = function()
 end
 
-local function make_floating_window(opts)
-  opts = opts or {}
-  local width = opts.width or vim.o.columns
-  local height = opts.height or vim.o.lines
-
-  -- buf position
-  local col = math.floor((vim.o.columns - width) / 2)
-  local row = math.floor((vim.o.lines - height) / 2)
-
+local function make_floating_window(config)
   local buf = vim.api.nvim_create_buf(false, true)
-  --
-  --window options
-  local win_config = {
-    relative = "editor",
-    width = width,
-    height = height,
-    col = col,
-    row = row,
-    style = "minimal",
-    border = { " ", " ", " ", " ", " ", " ", " ", " ", }
-  }
 
-  local win = vim.api.nvim_open_win(buf, true, win_config)
+  local win = vim.api.nvim_open_win(buf, true, config)
 
   return { buf = buf, win = win }
 end
@@ -83,40 +64,50 @@ M.start_presentation = function(opts)
       width = width,
       height = 1,
       style = "minimal",
+      border = { " ", " ", " ", " ", " ", " ", " ", " ", },
       col = 1,
-      row = 1,
+      row = 0,
     },
     body = {
       relative = "editor",
       width = width,
-      height = height - 1,
+      height = height - 5,
+      style = "minimal",
       border = { " ", " ", " ", " ", " ", " ", " ", " ", },
+      col = 1,
+      row = 3,
     },
   }
 
-  local float = make_floating_window()
+  local header = make_floating_window(windows.header)
+  local body = make_floating_window(windows.body)
+
+  vim.bo[header.buf].filetype = "markdown"
+  vim.bo[body.buf].filetype = "markdown"
 
   local display_content = function(current_slide)
-    vim.api.nvim_buf_set_lines(float.buf, 0, -1, false, parsed.slides[current_slide].body)
-  end
-  local display_title = function(current_slide)
-    vim.api.nvim_buf_set_lines(float.buf, 0, -1, false, parsed.slides[current_slide].title)
+    local slide = parsed.slides[current_slide]
+
+    local padding = string.rep(" ", (width - #slide.title) / 2)
+    local title = padding .. slide.title
+    vim.api.nvim_buf_set_lines(header.buf, 0, -1, false, { title })
+    vim.api.nvim_buf_set_lines(body.buf, 0, -1, false, slide.body)
   end
 
   local current_slide = 1
   vim.keymap.set("n", 'n', function()
     current_slide = math.min(current_slide + 1, #parsed.slides)
     display_content(current_slide)
-  end, { buffer = float.buf })
+  end, { buffer = body.buf })
 
   vim.keymap.set("n", 'p', function()
     current_slide = math.max(current_slide - 1, 1)
     display_content(current_slide)
-  end, { buffer = float.buf })
+  end, { buffer = body.buf })
 
   vim.keymap.set('n', 'q', function()
-    vim.api.nvim_win_close(float.win, true)
-  end, { buffer = float.buf })
+    vim.api.nvim_win_close(body.win, true)
+  end, { buffer = body.buf })
 
   local restore = {
     cmdheight = {
@@ -130,15 +121,19 @@ M.start_presentation = function(opts)
   end
 
   vim.api.nvim_create_autocmd("BufLeave", {
-    buffer = float.buf,
+    buffer = body.buf,
     callback = function()
       for option, config in pairs(restore) do
         vim.opt[option] = config.restore
       end
+
+      pcall(vim.api.nvim_win_close, header.win, true)
     end
   })
 
   display_content(current_slide)
 end
+
+M.start_presentation { bufnr = 15 }
 
 return M
