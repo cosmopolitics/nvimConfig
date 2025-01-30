@@ -134,6 +134,4 @@ M.start_presentation = function(opts)
   display_content(current_slide)
 end
 
-M.start_presentation { bufnr = 15 }
-
 return M
