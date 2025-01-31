@@ -3,10 +3,13 @@ local M = {}
 M.setup = function()
 end
 
-local function make_floating_window(config)
-  local buf = vim.api.nvim_create_buf(false, true)
+local function make_floating_window(config, enter)
+  if enter == nil then
+    enter = false
+  end
 
-  local win = vim.api.nvim_open_win(buf, true, config)
+  local buf = vim.api.nvim_create_buf(false, true)
+  local win = vim.api.nvim_open_win(buf, enter, config)
 
   return { buf = buf, win = win }
 end
@@ -79,8 +82,8 @@ M.start_presentation = function(opts)
     },
   }
 
-  local header = make_floating_window(windows.header)
-  local body = make_floating_window(windows.body)
+  local header = make_floating_window(windows.header, false)
+  local body = make_floating_window(windows.body, true)
 
   vim.bo[header.buf].filetype = "markdown"
   vim.bo[body.buf].filetype = "markdown"
