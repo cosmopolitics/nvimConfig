@@ -1,7 +1,5 @@
 local set = vim.opt
 
-set.clipboard = "unnamedplus"
-
 set.guicursor = ""
 set.cmdheight = 0
 
@@ -25,9 +23,9 @@ set.undofile = true
 set.hlsearch = false
 set.incsearch = true
 
-set.termguicolors = true
+-- set.termguicolors = true
 
-set.scrolloff = 8
+set.scrolloff = 10
 set.signcolumn = "yes"
 set.isfname:append("@-@")
 
@@ -36,5 +34,3 @@ set.updatetime = 50
 set.colorcolumn = "800"
 
 vim.g.mapleader = " "
-
-vim.keymap.set("n", "<leader><leader>x", "<cmd>source %<CR>")

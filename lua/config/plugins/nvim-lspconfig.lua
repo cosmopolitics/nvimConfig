@@ -23,7 +23,7 @@ return {
       require("lspconfig").nil_ls.setup { capabilities = capabilities }
       require("lspconfig").basedpyright.setup { capabilities = capabilities }
       require("lspconfig").elp.setup { capabilities = capabilities }
-      require("lspconfig").ocamllsp.setup { capabilities = capabilities }
+      require("lspconfig").hls.setup { capabilities = capabilities }
 
       vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
