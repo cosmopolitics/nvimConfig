@@ -5,6 +5,13 @@ require "float_terminal"
 vim.pack.add({
   { src = "https://github.com/rose-pine/neovim" },
   { src = "https://github.com/stevearc/oil.nvim" },
+  { src = 'https://github.com/jiaoshijie/undotree' },
+  { src = 'https://github.com/nvim-lua/plenary.nvim' },
+  { src = 'https://github.com/nvim-telescope/telescope.nvim' },
+  { src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim' },
+  { src = 'https://github.com/lambdalisue/vim-suda' },
+  { src = 'https://github.com/windwp/nvim-autopairs' },
+  { src = 'https://github.com/echasnovski/mini.nvim' },
   { src = "https://github.com/neovim/nvim-lspconfig" },
   {
     src = 'https://github.com/lewis6991/gitsigns.nvim',
@@ -26,15 +33,6 @@ vim.pack.add({
       signature = { enabled = true }
     },
   },
-  { src = 'https://github.com/nvim-telescope/telescope.nvim' },
-  { src = 'https://github.com/nvim-lua/plenary.nvim' },
-  { src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim' },
-  { src = 'https://github.com/lambdalisue/vim-suda' },
-  { src = 'https://github.com/windwp/nvim-autopairs' },
-  { src = 'https://github.com/echasnovski/mini.nvim' },
-  { src = 'https://github.com/rafamadriz/friendly-snippets' },
-  { src = 'https://github.com/jiaoshijie/undotree' },
-  { src = 'https://github.com/nvim-lua/plenary.nvim' },
 })
 require 'mini.statusline'.setup { use_icons = true }
 
@@ -66,33 +64,10 @@ require("oil").setup({
     "size",
     "mtime",
   },
-
 })
 
-local capabilities = require('blink.cmp').get_lsp_capabilities()
-require("lspconfig").lua_ls.setup { capabilities = capabilities }
-require("lspconfig").clangd.setup { capabilities = capabilities }
-require("lspconfig").zls.setup { capabilities = capabilities }
-require("lspconfig").nil_ls.setup { capabilities = capabilities }
-require("lspconfig").basedpyright.setup { capabilities = capabilities }
-require("lspconfig").elp.setup { capabilities = capabilities }
-
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(args)
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if not client then return end
-
-    if client.supports_method('textDocument/formatting') then
-      vim.api.nvim_create_autocmd('BufWritePre', {
-        buffer = args.buf,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
-        end
-      })
-    end
-  end,
-})
+vim.lsp.enable({ "lua_ls", "zls", "basedpyright", "nil_ls", "clang_d" })
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
 local augroup = vim.api.nvim_create_augroup
 local CosmoGroup = augroup('Cosmo', {})

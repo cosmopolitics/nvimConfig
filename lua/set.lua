@@ -3,7 +3,6 @@ local set = vim.o
 set.clipboard = "unnamedplus"
 set.winborder = "rounded"
 
-
 set.guicursor = ""
 set.cmdheight = 0
 
