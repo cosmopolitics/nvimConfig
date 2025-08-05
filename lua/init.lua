@@ -6,13 +6,15 @@ vim.pack.add({
   { src = "https://github.com/rose-pine/neovim" },
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = 'https://github.com/jiaoshijie/undotree' },
+
   { src = 'https://github.com/nvim-lua/plenary.nvim' },
   { src = 'https://github.com/nvim-telescope/telescope.nvim' },
   { src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim' },
+
   { src = 'https://github.com/lambdalisue/vim-suda' },
   { src = 'https://github.com/windwp/nvim-autopairs' },
+
   { src = 'https://github.com/echasnovski/mini.nvim' },
-  { src = "https://github.com/neovim/nvim-lspconfig" },
   {
     src = 'https://github.com/lewis6991/gitsigns.nvim',
     opts = {
@@ -25,6 +27,7 @@ vim.pack.add({
     },
   },
 
+  { src = "https://github.com/neovim/nvim-lspconfig" },
   {
     src = 'https://github.com/saghen/blink.cmp',
     opts = {
@@ -35,13 +38,14 @@ vim.pack.add({
   },
 })
 require 'mini.statusline'.setup { use_icons = true }
+require 'nvim-autopairs'.setup {}
 
-require("undotree").setup {}
+require 'undotree'.setup {}
 vim.keymap.set("n", "<leader>u", function()
   require("undotree").toggle()
 end)
 
-require('telescope').setup {}
+require 'telescope'.setup {}
 local builtin = require('telescope.builtin')
 vim.keymap.set("n", "<leader>pf", builtin.find_files)
 vim.keymap.set("n", "<leader>pp", builtin.git_files)
@@ -57,7 +61,7 @@ vim.keymap.set("n", "<leader>pn", function()
   }
 end)
 
-require("oil").setup({
+require "oil".setup({
   columns = {
     "icon",
     "permissions",
@@ -68,6 +72,24 @@ require("oil").setup({
 
 vim.lsp.enable({ "lua_ls", "zls", "basedpyright", "nil_ls", "clang_d" })
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+vim.lsp.config("lua_ls", {
+  settings = {
+    Lua = {
+      workspace = {
+        library = vim.api.nvim_get_runtime_file("", true),
+      }
+    }
+  },
+})
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client:supports_method('textDocument/completion') then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+  end,
+})
 
 local augroup = vim.api.nvim_create_augroup
 local CosmoGroup = augroup('Cosmo', {})
