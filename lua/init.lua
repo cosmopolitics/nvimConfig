@@ -48,8 +48,8 @@ end)
 require 'telescope'.setup {}
 local builtin = require('telescope.builtin')
 vim.keymap.set("n", "<leader>pf", builtin.find_files)
-vim.keymap.set("n", "<leader>pp", builtin.git_files)
-vim.keymap.set("n", "<leader>vh", builtin.help_tags)
+vim.keymap.set("n", "<leader>pg", builtin.git_files)
+vim.keymap.set("n", "<leader>ph", builtin.help_tags)
 vim.keymap.set("n", "<leader>ps", function()
   builtin.grep_string({
     search = vim.fn.input("Grep > ")
@@ -86,7 +86,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   callback = function(ev)
     local client = vim.lsp.get_client_by_id(ev.data.client_id)
     if client:supports_method('textDocument/completion') then
-      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+      vim.lsp.completion.enable(true, client.id, ev.buf, {})
     end
   end,
 })
