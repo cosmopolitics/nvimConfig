@@ -1,4 +1,5 @@
 local set = vim.o
+set.scrolloff = 10
 
 set.clipboard = "unnamedplus"
 set.winborder = "rounded"

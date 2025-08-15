@@ -3,6 +3,7 @@ require "remap"
 require "float_terminal"
 
 vim.pack.add({
+  { src = "https://github.com/folke/which-key.nvim" },
   { src = "https://github.com/rose-pine/neovim" },
   { src = "https://github.com/stevearc/oil.nvim" },
   { src = 'https://github.com/jiaoshijie/undotree' },
@@ -12,9 +13,9 @@ vim.pack.add({
   { src = 'https://github.com/nvim-telescope/telescope-fzf-native.nvim' },
 
   { src = 'https://github.com/lambdalisue/vim-suda' },
+  { src = 'https://github.com/echasnovski/mini.nvim' },
   { src = 'https://github.com/windwp/nvim-autopairs' },
 
-  { src = 'https://github.com/echasnovski/mini.nvim' },
   {
     src = 'https://github.com/lewis6991/gitsigns.nvim',
     opts = {
@@ -27,18 +28,42 @@ vim.pack.add({
     },
   },
 
+  { src = "https://github.com/mason-org/mason.nvim" },
+  { src = "https://github.com/mason-org/mason-lspconfig.nvim" },
   { src = "https://github.com/neovim/nvim-lspconfig" },
+  { src = "https://github.com/L3MON4D3/LuaSnip" },
   {
     src = 'https://github.com/saghen/blink.cmp',
     opts = {
-      keymap = { preset = 'super-tab' },
-      completion = { documentation = { auto_show = true } },
-      signature = { enabled = true }
+      keymap = {
+        preset = 'enter',
+      },
+      servers = {
+        clangd = {},
+        zls = {},
+        basedpyright = {},
+        luals = {},
+      },
+      completion = {
+        documentation = { auto_show = true, auto_show_delay_ms = 300 },
+      },
+      sources = {
+        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+      },
+      snippets = { preset = 'luasnip' },
+      fuzzy = { implementation = 'lua' },
+      signature = { enabled = true },
     },
   },
 })
-require 'mini.statusline'.setup { use_icons = true }
+require 'mini.ai'.setup { n_lines = 500 }
 require 'nvim-autopairs'.setup {}
+require 'mason'.setup {}
+require 'rose-pine'.setup {
+  styles = {
+    transparency = true,
+  }
+}
 
 require 'undotree'.setup {}
 vim.keymap.set("n", "<leader>u", function()
@@ -70,31 +95,45 @@ require "oil".setup({
   },
 })
 
-vim.lsp.enable({ "lua_ls", "zls", "basedpyright", "nil_ls", "clang_d" })
+-- vim.lsp.enable({ "lua_ls", "zls", "basedpyright", "nil_ls", "clangd" })
+
+local augroup = vim.api.nvim_create_augroup
+local autocmd = vim.api.nvim_create_autocmd
+
+local servers = {
+  clangd = {},
+  basedpyright = {},
+  zls = {},
+}
+
+require('mason-lspconfig').setup {
+  automatic_installation = false,
+  handlers = {
+    function(server_name)
+      local server = servers[server_name] or {}
+      server.capabilities = require "blink.cmp".get_lsp_capabilities()
+      require('lspconfig')[server_name].setup(server)
+    end,
+  },
+}
+
+vim.lsp.enable("lua_ls")
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 vim.lsp.config("lua_ls", {
   settings = {
     Lua = {
+      runtime = { version = "LuaJIT" },
       workspace = {
+        checkThirdParty = false,
         library = vim.api.nvim_get_runtime_file("", true),
-      }
+      },
+      completion = { callSnippet = 'Replace' },
+      diagnostics = { disabled = { 'missing-fields' } },
     }
   },
 })
 
-vim.api.nvim_create_autocmd('LspAttach', {
-  callback = function(ev)
-    local client = vim.lsp.get_client_by_id(ev.data.client_id)
-    if client:supports_method('textDocument/completion') then
-      vim.lsp.completion.enable(true, client.id, ev.buf, {})
-    end
-  end,
-})
-
-local augroup = vim.api.nvim_create_augroup
 local CosmoGroup = augroup('Cosmo', {})
-
-local autocmd = vim.api.nvim_create_autocmd
 local yank_group = augroup('HighlightYank', {})
 
 autocmd('TextYankPost', {
@@ -126,4 +165,3 @@ autocmd('LspAttach', {
 })
 
 vim.cmd("colorscheme rose-pine")
-vim.cmd(":hi statusline guibg=NONE")
