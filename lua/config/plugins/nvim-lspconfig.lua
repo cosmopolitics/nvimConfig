@@ -15,31 +15,14 @@ return {
     },
     config = function()
       local capabilities = require('blink.cmp').get_lsp_capabilities()
-      require("lspconfig").lua_ls.setup { capabilities = capabilities }
-      --require("lspconfig").pylyzer.setup { capabilities = capabilities }
-      require("lspconfig").glsl_analyzer.setup { capabilities = capabilities }
-      require("lspconfig").clangd.setup { capabilities = capabilities }
-      require("lspconfig").zls.setup { capabilities = capabilities }
-      require("lspconfig").nil_ls.setup { capabilities = capabilities }
-      require("lspconfig").basedpyright.setup { capabilities = capabilities }
-      require("lspconfig").elp.setup { capabilities = capabilities }
-      require("lspconfig").hls.setup { capabilities = capabilities }
 
-      vim.api.nvim_create_autocmd("LspAttach", {
-        callback = function(args)
-          local client = vim.lsp.get_client_by_id(args.data.client_id)
-          if not client then return end
-
-          if client.supports_method('textDocument/formatting') then
-            vim.api.nvim_create_autocmd('BufWritePre', {
-              buffer = args.buf,
-              callback = function()
-                vim.lsp.buf.format({ bufnr = args.buf, id = client.id })
-              end
-            })
-          end
-        end,
-      })
+      vim.lsp.config('lua_ls', {cmd = '/run/current-system/sw/bin/lua-lsp'})
+      vim.lsp.config('clangd', { capabilities = capabilities })
+      vim.lsp.config('zls', { capabilities = capabilities })
+      vim.lsp.config('nil_ls', { capabilities = capabilities })
+      vim.lsp.config('basedpyright', { capabilities = capabilities })
+      vim.lsp.config('ocamllsp', { capabilities = capabilities })
+      vim.lsp.enable = true;
     end,
   },
 }
