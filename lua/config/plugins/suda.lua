@@ -1,4 +1,4 @@
 return {
-  'lambdalisue/vim-suda',
-  "swaits/universal-clipboard.nvim",
+	"lambdalisue/vim-suda",
+	"swaits/universal-clipboard.nvim",
 }
