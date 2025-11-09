@@ -15,10 +15,6 @@ return {
 			-- Id is automatically added at the beginning, and name at the end
 			-- See :help oil-columns
 			columns = {
-				"icon",
-				"permissions",
-				"size",
-				"mtime",
 			},
 			-- Window-local options to use for oil buffers
 			win_options = {
