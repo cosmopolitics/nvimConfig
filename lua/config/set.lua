@@ -1,5 +1,12 @@
 local set = vim.opt
 
+set.winborder = 'rounded'
+set.foldenable = true
+set.foldlevel = 99
+set.foldmethod = "expr"
+set.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+
+
 set.guicursor = ""
 set.cmdheight = 0
 
