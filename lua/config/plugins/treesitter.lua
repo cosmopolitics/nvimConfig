@@ -3,7 +3,7 @@ return {
   lazy = false,
   build = ":TSUpdate",
   config = function()
-    require 'nvim-treesitter'.install {
+    require 'nvim-treesitter'.install({
       "c",
       "lua",
       "nix",
@@ -12,6 +12,6 @@ return {
       "go",
       "python",
       "sql"
-    }
+    })
   end
 }

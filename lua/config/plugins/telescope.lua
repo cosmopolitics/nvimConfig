@@ -2,14 +2,13 @@ return {
   -- init.lua:
   {
     "nvim-telescope/telescope.nvim",
-    tag = "latest",
     dependencies = {
       "nvim-lua/plenary.nvim",
       { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
     },
     config = function()
       require("telescope").setup {
-        file_previewer = require('telescope.previewers').cat.new {
+        file_previewer = require('telescope.previewers').vim_buffer_cat.new {
           cmd = 'bat --style=numbers --color=always',
         },
         grep_previewer = require('telescope.previewers').vimgrep.new {
@@ -31,6 +30,17 @@ return {
           cwd = vim.fn.stdpath("config"),
         })
       end)
+
+      vim.api.nvim_create_autocmd("User", {
+        pattern = "TelescopePreviewerLoaded",
+        callback = function(args)
+          if args.data.filetype ~= "help" then
+            vim.wo.number = true
+          elseif args.data.bufname:match("*.csv") then
+            vim.wo.wrap = false
+          end
+        end,
+      })
     end,
   },
 }
